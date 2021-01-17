@@ -1,5 +1,6 @@
 const tmi = require('tmi.js')
 const { config } = require('./config')
+const greetings = require('./config/greetings')
 
 const options = {
     options: {
@@ -15,23 +16,32 @@ const options = {
     channels: ['carlosvldzzz']
 }
 
+const welcomeList = ['hola', 'hello', 'buenas', 'saludos']
+
 const client = new tmi.client(options)
 
 client.connect();
 
 client.on('connected', (address, port) => {
-    client.action('carlosvldzzz', `Hello I'm carlosvldz-bot for twitch! Connected to ${address}:${port}`)
+    client.action('carlosvldzzz', `Hello I'm carlosvldz-bot for Twitch!`)
 })
 
+const sendMessage = (target, text, list, message) => {
+    list.some((t) => {
+        const includes = text.replace(/ /g, "").includes(t);
+        if(includes) client.say(target, message);
+        return text.includes(t);
+    })
+}
 client.on('chat', (target, ctx, message, self) => {
     if (self) return;
 
-    console.log(target);
-    console.log(ctx);
+    const text = message.toLowerCase();
 
-    const commandName = message.trim();
-
-    if (commandName === 'hola') {
-        client.say(target, `Bienvenido ${ctx.username}`);
-    }
+    sendMessage(
+        target,
+        text,
+        welcomeList,
+        `${ greetings.welcome } @${ ctx.username }`
+    );
 });

@@ -1,6 +1,6 @@
 # carlosvldz-bot
 
-carlosvldz-bot for chat in Twitch.
+carlosvldz-bot for chat on Twitch.
 
 ### Develop
 
